@@ -1,0 +1,23 @@
+---------  geo_distrib ---------
+Iteration nbr:					2
+Average:						0.322582483292
+Standard deviation:				0.0126645565033
+Standard error of the mean:		0.0089551937842
+
+---------  workers ---------
+Iteration nbr:					2
+Average:						0.495743513107
+Standard deviation:				0.00838947296143
+Standard error of the mean:		0.00593225322161
+
+Fastest method in order according to the average:
+geo_distrib	->	0.322582483292
+workers	->	0.495743513107 (53.6796133655 % more than the previous one).
+
+Less deviation from the average (standard deviation):
+workers	->	0.00838947296143
+geo_distrib	->	0.0126645565033 (50.9577128567 % more than the previous one).
+
+Most homogeneous method in order (standard error to the mean):
+workers	->	0.00593225322161
+geo_distrib	->	0.0089551937842 (50.9577128567 % more than the previous one).
