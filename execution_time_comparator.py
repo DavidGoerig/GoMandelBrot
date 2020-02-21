@@ -3,8 +3,8 @@
 # @author:  David Goerig                                #
 # @id:      djg53                                       #
 # @module:  Concurrency and Parallelism - CO890         #
-# @asses:   assess 3 - Coroutines in Python             #
-# @task:    task2                                       #
+# @asses:   assess 4- Go Worker and geometric           #
+#           distribution comparaison                    #
 #########################################################
 ###
 # desc: compare the fastest way to read a large file (nested loop, classic object programming, coroutines), and show the result in a file
@@ -41,18 +41,31 @@ def manage_args():
             return 1
         iteration = args.n
     return iteration, execoutput, outputfilename
+
 ##
 # param:    dir_path: path of the current working directory, params: script parameter (here the filename), execoutput: redirection file
 # desc:     exec the python scripts with the file as argument and redirect in output if wanted
 ##
 
 
-def exec_script(dir_path, go_scrit, execoutput):
+def build_script(dir_path, go_scrit, execoutput):
     if execoutput == "None":
         execoutput = ""
     else:
         execoutput = " > " + execoutput
-    os.system("go run  " + dir_path + "/" + go_scrit + " " + execoutput)
+    os.system("go build  " + dir_path + "/" + go_scrit + " " + execoutput)
+##
+# param:    dir_path: path of the current working directory, params: script parameter (here the filename), execoutput: redirection file
+# desc:     exec the python scripts with the file as argument and redirect in output if wanted
+##
+
+
+def exec_script(dir_path, go_scrit, execoutput, arg):
+    if execoutput == "None":
+        execoutput = ""
+    else:
+        execoutput = " > " + execoutput
+    os.system("." + "/" + go_scrit + " " + str(arg) + " " + execoutput)
 ##
 # param:    inputfilename: name of the file to read, iteration: nbr of iteration, execoutput: redirection file
 # desc:     loop on each scripts (in python_file_name), execute them, and return execution time in a dictionnary
@@ -64,17 +77,51 @@ def exec_them(iteration, execoutput):
         "geo_distrib": "Graphical_geo_distrib.go",
         "workers": "Graphical_worker.go"
     }
+    go_experiment = {
+        "geo_distrib_divide_in_5": "Graphical_geo_distrib",
+        "geo_distrib_divide_in_10": "Graphical_geo_distrib",
+        "geo_distrib_divide_in_20": "Graphical_geo_distrib",
+        "geo_distrib_divide_in_50": "Graphical_geo_distrib",
+        "geo_distrib_divide_in_100": "Graphical_geo_distrib ",
+        "worker_with_5_workers": "Graphical_worker",
+        "worker_with_10_workers": "Graphical_worker",
+        "worker_with_20_workers": "Graphical_worker",
+        "worker_with_50_workers": "Graphical_worker",
+        "worker_with_100_workers": "Graphical_worker",
+    }
+    go_nbr = {
+        "geo_distrib_divide_in_5": 5,
+        "geo_distrib_divide_in_10": 10,
+        "geo_distrib_divide_in_20": 20,
+        "geo_distrib_divide_in_50": 50,
+        "geo_distrib_divide_in_100": 100,
+        "worker_with_5_workers": 5,
+        "worker_with_10_workers": 10,
+        "worker_with_20_workers": 20,
+        "worker_with_50_workers": 50,
+        "worker_with_100_workers": 100,
+    }
     result = {
-        "geo_distrib": [],
-        "workers": []
+        "geo_distrib_divide_in_5": [],
+        "geo_distrib_divide_in_10": [],
+        "geo_distrib_divide_in_20": [],
+        "geo_distrib_divide_in_50": [],
+        "geo_distrib_divide_in_100": [],
+        "worker_with_5_workers": [],
+        "worker_with_10_workers": [],
+        "worker_with_20_workers": [],
+        "worker_with_50_workers": [],
+        "worker_with_100_workers": [],
     }
     dir_path = os.path.dirname(os.path.realpath(__file__))
     for x in go_file_name:
+        build_script(dir_path, go_file_name[x], execoutput)
+    for x in go_experiment:
         for it in range(0, iteration):
             # start time counter
             start_time = time.time()
             # exec scripts
-            exec_script(dir_path, go_file_name[x], execoutput)
+            exec_script(dir_path, go_experiment[x], execoutput, go_nbr[x])
             # calc execution time
             result[x].append(time.time() - start_time)
     return result
@@ -85,7 +132,6 @@ def exec_them(iteration, execoutput):
 
 
 def compute_result(results):
-    print(results)
     # dictionaries containing results for each scripts
     average = {}
     sd = {}
@@ -109,9 +155,40 @@ def compute_result(results):
         sd[x] = loc_sd
         sem[x] = loc_sem
     return average, sd, sem
+
+
+##
+# param:    dictionary_to_sort
+# desc:     find a min in a dict and return the key
+##
+def find_min(dictionary_to_sort):
+    res = -1
+    val = -1
+    for x in dictionary_to_sort:
+        if res == -1:
+            res = x
+            val = dictionary_to_sort[x]
+        if dictionary_to_sort[x] < val:
+            res = x
+            val = dictionary_to_sort[x]
+    return res
+##
+# param:    dictionary_to_sort_source
+# desc:     create an array with the key in the wanted order
+##
+
+def sort_dict_min_to_max(dictionary_to_sort_source):
+    dictionary_to_sort = dict(dictionary_to_sort_source)
+    order = []
+    while len(dictionary_to_sort) != 0:
+        key = find_min(dictionary_to_sort)
+        order.append(key)
+        del dictionary_to_sort[key]
+    return order
+
 ##
 # param:    outputfilename: file name for the results, average: average for each scripts,
-#           sd: standard deviation for each scripts, sem:  for each scripts, iteration: nbr of iteration
+#           sd: standard deviation for each scripts, sem:  for each
 # desc:     create the file with information for each scripts, then order them and show the % diff
 ##
 
@@ -127,34 +204,35 @@ def create_file(outputfilename, average, sd, sem, iteration):
     content += "Fastest method in order according to the average:\n"
 
     # sort averages, calc % diff and print
-    sorted_average = {k: v for k, v in sorted(average.items(), key=lambda item: -item[1], reverse=True)}
+    # TODO: ICI JUSTE SORT CA, ENSUITE L'APPLIQUER A SD ET SEM
+    sorted_average = sort_dict_min_to_max(average)
     last = 0
     for x in sorted_average:
         diff = ""
         if (last != 0):
-            diff = " (" + str(((sorted_average[x] - last) / last) * 100) + " % more than the previous one)."
-        last = sorted_average[x]
-        content += x + "\t->\t" + str(sorted_average[x]) + diff + "\n"
+            diff = " (" + str(((average[x] - last) / last) * 100) + " % more than the previous one)."
+        last = average[x]
+        content += x + "\t->\t" + str(average[x]) + diff + "\n"
     content += "\nLess deviation from the average (standard deviation):\n"
     # sort standard deviation, calc % diff and print
-    sorted_sd = {k: v for k, v in sorted(sd.items(), key=lambda item: -item[1], reverse=True)}
+    sorted_sd = sort_dict_min_to_max(sd)
     last = 0
     for x in sorted_sd:
         diff = ""
         if (last != 0):
-            diff = " (" + str(((sorted_sd[x] - last) / last) * 100) + " % more than the previous one)."
-        last = sorted_sd[x]
-        content += x + "\t->\t" + str(sorted_sd[x]) + diff +  "\n"
+            diff = " (" + str(((sd[x] - last) / last) * 100) + " % more than the previous one)."
+        last = sd[x]
+        content += x + "\t->\t" + str(sd[x]) + diff +  "\n"
     content += "\nMost homogeneous method in order (standard error to the mean):\n"
     # sort standard error to the, calc % diff and print
-    sorted_sem = {k: v for k, v in sorted(sem.items(), key=lambda item: -item[1], reverse=True)}
+    sorted_sem = sort_dict_min_to_max(sem)
     last = 0
     for x in sorted_sem:
         diff = ""
         if last != 0:
-            diff = " (" + str(((sorted_sem[x] - last) / last) * 100) + " % more than the previous one)."
-        last = sorted_sem[x]
-        content += x + "\t->\t" + str(sorted_sem[x]) + diff +  "\n"
+            diff = " (" + str(((sem[x] - last) / last) * 100) + " % more than the previous one)."
+        last = sem[x]
+        content += x + "\t->\t" + str(sem[x]) + diff +  "\n"
     # open the file, overwrite it, write in it, and then close the file
     f = open(outputfilename, "w")
     f.write(content)

@@ -1,0 +1,95 @@
+---------  geo_distrib_divide_in_5 ---------
+Iteration nbr:					1000
+Average:						0.118698720932
+Standard deviation:				0.00555105448831
+Standard error of the mean:		0.000555105448831
+
+---------  geo_distrib_divide_in_10 ---------
+Iteration nbr:					1000
+Average:						0.119523575306
+Standard deviation:				0.013191189316
+Standard error of the mean:		0.0013191189316
+
+---------  geo_distrib_divide_in_20 ---------
+Iteration nbr:					1000
+Average:						0.118268749714
+Standard deviation:				0.0106666869469
+Standard error of the mean:		0.00106666869469
+
+---------  geo_distrib_divide_in_50 ---------
+Iteration nbr:					1000
+Average:						0.116515176296
+Standard deviation:				0.0100529527967
+Standard error of the mean:		0.00100529527967
+
+---------  geo_distrib_divide_in_100 ---------
+Iteration nbr:					1000
+Average:						0.110143210888
+Standard deviation:				0.00913484994708
+Standard error of the mean:		0.000913484994708
+
+---------  worker_with_5_workers ---------
+Iteration nbr:					1000
+Average:						0.302050673962
+Standard deviation:				0.00879054567133
+Standard error of the mean:		0.000879054567133
+
+---------  worker_with_10_workers ---------
+Iteration nbr:					1000
+Average:						0.345632424355
+Standard deviation:				0.0169195602689
+Standard error of the mean:		0.00169195602689
+
+---------  worker_with_20_workers ---------
+Iteration nbr:					1000
+Average:						0.352062489986
+Standard deviation:				0.0143906055487
+Standard error of the mean:		0.00143906055487
+
+---------  worker_with_50_workers ---------
+Iteration nbr:					1000
+Average:						0.358691396713
+Standard deviation:				0.00835621499202
+Standard error of the mean:		0.000835621499202
+
+---------  worker_with_100_workers ---------
+Iteration nbr:					1000
+Average:						0.399245557785
+Standard deviation:				0.00769529516367
+Standard error of the mean:		0.000769529516367
+
+Fastest method in order according to the average:
+geo_distrib_divide_in_100	->	0.110143210888
+geo_distrib_divide_in_50	->	0.116515176296 (5.78516402142 % more than the previous one).
+geo_distrib_divide_in_20	->	0.118268749714 (1.50501717751 % more than the previous one).
+geo_distrib_divide_in_5	->	0.118698720932 (0.363554378607 % more than the previous one).
+geo_distrib_divide_in_10	->	0.119523575306 (0.694914290108 % more than the previous one).
+worker_with_5_workers	->	0.302050673962 (152.712214464 % more than the previous one).
+worker_with_10_workers	->	0.345632424355 (14.4286221319 % more than the previous one).
+worker_with_20_workers	->	0.352062489986 (1.86037685668 % more than the previous one).
+worker_with_50_workers	->	0.358691396713 (1.88287787407 % more than the previous one).
+worker_with_100_workers	->	0.399245557785 (11.306142674 % more than the previous one).
+
+Less deviation from the average (standard deviation):
+geo_distrib_divide_in_5	->	0.00555105448831
+worker_with_100_workers	->	0.00769529516367 (38.6276279557 % more than the previous one).
+worker_with_50_workers	->	0.00835621499202 (8.58862219443 % more than the previous one).
+worker_with_5_workers	->	0.00879054567133 (5.19769632202 % more than the previous one).
+geo_distrib_divide_in_100	->	0.00913484994708 (3.91675657723 % more than the previous one).
+geo_distrib_divide_in_50	->	0.0100529527967 (10.0505520608 % more than the previous one).
+geo_distrib_divide_in_20	->	0.0106666869469 (6.10501374743 % more than the previous one).
+geo_distrib_divide_in_10	->	0.013191189316 (23.6671647123 % more than the previous one).
+worker_with_20_workers	->	0.0143906055487 (9.09255567423 % more than the previous one).
+worker_with_10_workers	->	0.0169195602689 (17.5736504742 % more than the previous one).
+
+Most homogeneous method in order (standard error to the mean):
+geo_distrib_divide_in_5	->	0.000555105448831
+worker_with_100_workers	->	0.000769529516367 (38.6276279557 % more than the previous one).
+worker_with_50_workers	->	0.000835621499202 (8.58862219443 % more than the previous one).
+worker_with_5_workers	->	0.000879054567133 (5.19769632202 % more than the previous one).
+geo_distrib_divide_in_100	->	0.000913484994708 (3.91675657723 % more than the previous one).
+geo_distrib_divide_in_50	->	0.00100529527967 (10.0505520608 % more than the previous one).
+geo_distrib_divide_in_20	->	0.00106666869469 (6.10501374743 % more than the previous one).
+geo_distrib_divide_in_10	->	0.0013191189316 (23.6671647123 % more than the previous one).
+worker_with_20_workers	->	0.00143906055487 (9.09255567423 % more than the previous one).
+worker_with_10_workers	->	0.00169195602689 (17.5736504742 % more than the previous one).
